@@ -1,3 +1,5 @@
+--- START OF FILE index.html ---
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +31,12 @@
 
         <!-- SECTION 1: SINGLE ANALYSIS -->
         <section id="section-single">
+            <!-- Date Input -->
+            <div class="input-group">
+                <label data-i18n="lbl_dob">Date of Birth</label>
+                <input type="date" id="input-dob">
+            </div>
+
             <div class="input-group">
                 <label data-i18n="lbl_category">Category</label>
                 <select id="category-select">
@@ -47,9 +55,23 @@
 
             <button id="btn-calculate" class="action-btn" data-i18n="btn_calc">Calculate Vibration</button>
 
+            <!-- Results Area -->
             <div id="result-area" class="result-box hidden">
+                
+                <!-- Personal Numerology Profile -->
+                <div class="profile-box">
+                    <p><span data-i18n="res_basic_lbl">Basic Number</span>: <strong id="res-basic-num"></strong></p>
+                    <p><span data-i18n="res_lucky_lbl">Lucky Numbers</span>: <strong id="res-lucky-list" class="highlight-text"></strong></p>
+                </div>
+
+                <hr class="divider">
+
+                <!-- Name Calculation -->
                 <p id="result-message"></p>
                 <div class="big-number" id="result-number"></div>
+                
+                <!-- Suitability Verdict -->
+                <div id="suitability-box" class="suitability-badge"></div>
             </div>
         </section>
 

@@ -8,6 +8,37 @@
     --neutral: #f1c40f;
     --enemy: #e74c3c;
 }
+/* Add to style.css */
+.profile-box {
+    text-align: left;
+    background: #f0f4f8;
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    font-size: 0.95rem;
+}
+.profile-box p {
+    margin: 5px 0;
+}
+.highlight-text {
+    color: var(--primary);
+    font-size: 1.1rem;
+}
+.divider {
+    border: 0;
+    height: 1px;
+    background: #ddd;
+    margin: 15px 0;
+}
+.suitability-badge {
+    margin-top: 15px;
+    padding: 10px;
+    border-radius: 8px;
+    color: white;
+    font-weight: bold;
+    display: inline-block;
+    width: 90%;
+}
 
 /* Add this to your existing CSS */
 .lang-select {
