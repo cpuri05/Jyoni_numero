@@ -1,59 +1,45 @@
-
 :root {
-    --primary: #4a90e2;
-    --bg: #f4f7f6;
-    --card: #ffffff;
-    --text: #333;
-    --friend: #2ecc71;
-    --neutral: #f1c40f;
-    --enemy: #e74c3c;
-}
-/* Add to style.css */
-.profile-box {
-    text-align: left;
-    background: #f0f4f8;
-    padding: 10px 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    font-size: 0.95rem;
-}
-.profile-box p {
-    margin: 5px 0;
-}
-.highlight-text {
-    color: var(--primary);
-    font-size: 1.1rem;
-}
-.divider {
-    border: 0;
-    height: 1px;
-    background: #ddd;
-    margin: 15px 0;
-}
-.suitability-badge {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 8px;
-    color: white;
-    font-weight: bold;
-    display: inline-block;
-    width: 90%;
+    /* Light Mode Palette (Default) */
+    --primary: #4f46e5;       /* Indigo 600 */
+    --primary-dark: #3730a3;  /* Indigo 800 */
+    --accent: #f59e0b;        /* Amber/Gold */
+    --bg: #f8fafc;            /* Slate 50 */
+    --card-bg: #ffffff;
+    --text: #1e293b;          /* Slate 800 */
+    --text-muted: #64748b;    /* Slate 500 */
+    --border: #e2e8f0;
+    
+    /* Status Colors */
+    --friend: #10b981;        /* Emerald */
+    --neutral: #64748b;       /* Slate Grey */
+    --enemy: #ef4444;         /* Red */
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
 }
 
-/* Add this to your existing CSS */
-.lang-select {
-    margin-top: 10px;
-    padding: 5px;
-    border-radius: 5px;
-    border: none;
-    background: white;
-    color: var(--primary);
-    font-weight: bold;
-    cursor: pointer;
+@media (prefers-color-scheme: dark) {
+    :root {
+        /* Dark Mode Palette */
+        --primary: #818cf8;       /* Indigo 400 */
+        --primary-dark: #6366f1;  /* Indigo 500 */
+        --accent: #fbbf24;        /* Amber 400 */
+        --bg: #0f172a;            /* Slate 900 */
+        --card-bg: #1e293b;       /* Slate 800 */
+        --text: #f1f5f9;          /* Slate 100 */
+        --text-muted: #94a3b8;    /* Slate 400 */
+        --border: #334155;
+    }
+}
+
+* {
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 body {
-    font-family: 'Segoe UI', sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     background-color: var(--bg);
     color: var(--text);
     margin: 0;
@@ -61,87 +47,204 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    min-height: 100vh;
 }
 
+/* Header */
 header {
-    background-color: var(--primary);
+    background: linear-gradient(135deg, var(--primary-dark), var(--primary));
     color: white;
     width: 100%;
-    padding: 1rem 0;
+    padding: 1.5rem 0;
     text-align: center;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
+header h1 {
+    margin: 0;
+    font-size: 1.5rem;
+    letter-spacing: 1px;
+    font-weight: 700;
+}
+
+/* Language Switcher */
+.lang-select {
+    margin-top: 10px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: none;
+    background: rgba(255, 255, 255, 0.2);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 0.9rem;
+    backdrop-filter: blur(5px);
+}
+.lang-select option {
+    background-color: var(--card-bg);
+    color: var(--text);
+}
+
+/* Main Container */
 main {
     width: 90%;
-    max-width: 500px;
-    margin-top: 20px;
-}
-
-.input-group {
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-}
-
-label {
-    font-weight: bold;
-    margin-bottom: 5px;
-    font-size: 0.9rem;
-}
-
-input, select {
-    padding: 12px;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    font-size: 1rem;
-}
-
-.hidden { display: none !important; }
-
-.action-btn {
-    width: 100%;
-    padding: 15px;
-    background-color: var(--primary);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    cursor: pointer;
-    font-weight: bold;
-    margin-top: 10px;
-}
-
-.result-box {
-    margin-top: 20px;
-    background: var(--card);
-    padding: 20px;
-    border-radius: 10px;
-    text-align: center;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-}
-
-.big-number {
-    font-size: 4rem;
-    font-weight: bold;
-    color: var(--primary);
+    max-width: 480px;
+    margin: 20px auto 40px auto;
 }
 
 /* Tabs */
 .tabs {
     display: flex;
-    margin-bottom: 20px;
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    padding: 5px;
+    margin-bottom: 25px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
 }
+
 .tabs button {
     flex: 1;
-    padding: 10px;
-    background: #e0e0e0;
+    padding: 12px;
+    background: transparent;
     border: none;
+    border-radius: 8px;
     cursor: pointer;
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
 }
+
 .tabs button.active {
-    background: var(--primary);
+    background-color: var(--primary);
     color: white;
+    box-shadow: var(--shadow-sm);
+}
+
+/* Forms & Inputs */
+.input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: 600;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+input, select {
+    padding: 14px;
+    background-color: var(--card-bg);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 1rem;
+    color: var(--text);
+    outline: none;
+    width: 100%;
+}
+
+input:focus, select:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Buttons */
+.action-btn {
+    width: 100%;
+    padding: 16px;
+    background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    font-weight: 700;
+    margin-top: 10px;
+    box-shadow: var(--shadow-md);
+    transform: translateY(0);
+    transition: transform 0.1s;
+}
+
+.action-btn:active {
+    transform: translateY(2px);
+    box-shadow: var(--shadow-sm);
+}
+
+/* Results Cards */
+.result-box {
+    margin-top: 25px;
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 16px;
+    text-align: center;
+    box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+    animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.big-number {
+    font-size: 5rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+    margin: 10px 0;
+    text-shadow: 2px 2px 0px rgba(0,0,0,0.05);
+}
+
+/* Profile Box (Lucky Numbers) */
+.profile-box {
+    text-align: left;
+    background: rgba(99, 102, 241, 0.05); /* Very light primary tint */
+    padding: 15px 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 0.95rem;
+    border-left: 4px solid var(--primary);
+}
+
+.profile-box p {
+    margin: 8px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.highlight-text {
+    color: var(--primary);
+    font-weight: 800;
+}
+
+.divider {
+    border: 0;
+    height: 1px;
+    background: var(--border);
+    margin: 20px 0;
+}
+
+/* Suitability Badge */
+.suitability-badge {
+    margin-top: 15px;
+    padding: 12px 20px;
+    border-radius: 50px; /* Pill shape */
+    color: white;
+    font-weight: 700;
+    display: inline-block;
+    width: 100%;
+    box-shadow: var(--shadow-sm);
+    font-size: 0.95rem;
 }
 
 /* Compatibility Grid */
@@ -149,18 +252,28 @@ input, select {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 20px;
 }
+
 .mid-number {
-    font-size: 2rem;
-    font-weight: bold;
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text);
 }
+
 .relation-badge {
-    padding: 5px 10px;
-    border-radius: 5px;
-    font-weight: bold;
+    padding: 6px 12px;
+    border-radius: 8px;
+    font-weight: 700;
     color: white;
+    font-size: 0.9rem;
+    text-transform: uppercase;
 }
+
+/* Status Colors Classes */
 .status-Friend { background-color: var(--friend); }
-.status-Neutral { background-color: var(--neutral); color: #333; }
+.status-Neutral { background-color: var(--neutral); color: white; }
 .status-Enemy { background-color: var(--enemy); }
+
+/* Utilities */
+.hidden { display: none !important; }
