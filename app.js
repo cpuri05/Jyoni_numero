@@ -1,10 +1,13 @@
-// --- 1. TRANSLATION DICTIONARY ---
+// --- 1. TRANSLATION DICTIONARY UPDATE ---
+// (Paste this into the top of app.js)
 const translations = {
     en: {
         app_title: "Numerology",
         tab_single: "Single Analysis",
         tab_compat: "Compatibility",
+        tab_forecast: "Forecast", // NEW
         lbl_dob: "Date of Birth",
+        lbl_target_date: "Forecast Date", // NEW
         lbl_category: "Category",
         lbl_value: "Enter Name/Text",
         opt_name: "Name",
@@ -13,6 +16,7 @@ const translations = {
         opt_custom: "Other...",
         btn_calc: "Analyze",
         btn_compare: "Check Compatibility",
+        btn_forecast: "Get Horoscope", // NEW
         lbl_person_a: "First Name/Entity",
         lbl_person_b: "Second Name/Entity",
         res_prefix: "The",
@@ -27,13 +31,23 @@ const translations = {
         suit_exc: "Excellent Match! (Lucky Number)",
         suit_good: "Good Match (Friendly)",
         suit_neut: "Neutral Match",
-        suit_avoid: "Avoid / Challenging (Enemy)"
+        suit_avoid: "Avoid / Challenging (Enemy)",
+        // Forecast Specific
+        fc_year: "Yearly Influence (Varshank)",
+        fc_month: "Monthly Influence (Masank)",
+        fc_day: "Daily Influence (Dinank)",
+        fc_favorable: "Favorable",
+        fc_normal: "Normal",
+        fc_unfavorable: "Unfavorable/Caution",
+        fc_ruler: "Ruler"
     },
     hi: {
         app_title: "अंकज्योतिष",
         tab_single: "एकल विश्लेषण",
         tab_compat: "मैत्री चक्र",
+        tab_forecast: "वर्षफल", // NEW
         lbl_dob: "जन्म तिथि",
+        lbl_target_date: "भविष्यफल तिथि", // NEW
         lbl_category: "श्रेणी",
         lbl_value: "नाम दर्ज करें",
         opt_name: "नाम",
@@ -42,6 +56,7 @@ const translations = {
         opt_custom: "अन्य...",
         btn_calc: "विश्लेषण करें",
         btn_compare: "मैत्री जांचें",
+        btn_forecast: "भविष्यफल देखें", // NEW
         lbl_person_a: "पहला नाम",
         lbl_person_b: "दूसरा नाम",
         res_prefix: "",
@@ -56,38 +71,53 @@ const translations = {
         suit_exc: "सर्वोत्तम! (भाग्यशाली अंक)",
         suit_good: "शुभ (मित्र अंक)",
         suit_neut: "सम (साधारण)",
-        suit_avoid: "अशुभ / शत्रु (बचें)"
+        suit_avoid: "अशुभ / शत्रु (बचें)",
+        // Forecast Specific
+        fc_year: "वर्षफल (वरशंक)",
+        fc_month: "मासफल (मासंक)",
+        fc_day: "दैनिक फल (दिनांक)",
+        fc_favorable: "शुभ (Favorable)",
+        fc_normal: "सम (Normal)",
+        fc_unfavorable: "अशुभ (Unfavorable)",
+        fc_ruler: "स्वामी"
     }
 };
 
 let currentLang = 'en';
 let engine;
 
-// --- UI Elements ---
+// UI Elements (Add new ones)
 let langSwitch, categorySelect, categoryCustom, inputText, inputDob, btnCalculate;
 let resultArea, resultMsg, resultNum, resBasicNum, resLuckyList, suitabilityBox;
 let inputA, inputB, btnCompare, compatResultArea, numADisp, numBDisp, nameADisp, nameBDisp, relationStatus, compatDesc;
-let sectionSingle, sectionCompat, tabSingle, tabCompat;
+let sectionSingle, sectionCompat, sectionForecast;
+let tabSingle, tabCompat, tabForecast;
 
-// Initialize after DOM loads
+// Forecast Elements
+let inputDobFc, inputTargetDate, btnForecast, forecastResultArea;
+let cardYear, cardMonth, cardDay;
+let valYear, valMonth, valDay;
+let statusYear, statusMonth, statusDay;
+
 document.addEventListener('DOMContentLoaded', () => {
     engine = new NumerologyEngine();
     
-    // UI References
+    // ... (Previous Reference bindings) ...
     langSwitch = document.getElementById('lang-switch');
     sectionSingle = document.getElementById('section-single');
     sectionCompat = document.getElementById('section-compat');
+    sectionForecast = document.getElementById('section-forecast'); // NEW
+
     tabSingle = document.getElementById('tab-single');
     tabCompat = document.getElementById('tab-compat');
-    
-    // Single Analysis Inputs
+    tabForecast = document.getElementById('tab-forecast'); // NEW
+
+    // Single Logic References
     categorySelect = document.getElementById('category-select');
     categoryCustom = document.getElementById('category-custom');
     inputText = document.getElementById('input-text');
     inputDob = document.getElementById('input-dob');
     btnCalculate = document.getElementById('btn-calculate');
-    
-    // Single Analysis Results
     resultArea = document.getElementById('result-area');
     resultMsg = document.getElementById('result-message');
     resultNum = document.getElementById('result-number');
@@ -95,7 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     resLuckyList = document.getElementById('res-lucky-list');
     suitabilityBox = document.getElementById('suitability-box');
 
-    // Compatibility Inputs
+    // Compat Logic References
     inputA = document.getElementById('compat-input-a');
     inputB = document.getElementById('compat-input-b');
     btnCompare = document.getElementById('btn-compare');
@@ -107,61 +137,149 @@ document.addEventListener('DOMContentLoaded', () => {
     relationStatus = document.getElementById('relation-status');
     compatDesc = document.getElementById('compat-desc');
 
+    // Forecast Logic References // NEW
+    inputDobFc = document.getElementById('input-dob-fc');
+    inputTargetDate = document.getElementById('input-target-date');
+    btnForecast = document.getElementById('btn-forecast');
+    forecastResultArea = document.getElementById('forecast-result-area');
+    
+    // Forecast Cards
+    cardYear = document.getElementById('card-year');
+    cardMonth = document.getElementById('card-month');
+    cardDay = document.getElementById('card-day');
+
+    // Set Default Date to Today for Target
+    inputTargetDate.valueAsDate = new Date();
+
+
     // --- LANGUAGE FUNCTION ---
     function updateLanguage(lang) {
         currentLang = lang;
         const t = translations[lang];
         
-        // Update simple text elements
         document.querySelectorAll('[data-i18n]').forEach(elem => {
             const key = elem.getAttribute('data-i18n');
             if (t[key]) elem.textContent = t[key];
         });
 
-        // Update select options manually
+        // Update specific manual elements
         categorySelect.options[0].textContent = t.opt_name;
         categorySelect.options[1].textContent = t.opt_business;
         categorySelect.options[2].textContent = t.opt_vehicle;
         categorySelect.options[3].textContent = t.opt_custom;
 
-        // Update placeholders
         if(lang === 'hi') {
             inputText.placeholder = "जैसे: सूर्य एतर्प्राइज़";
-            categoryCustom.placeholder = "श्रेणी का नाम लिखें";
             inputA.placeholder = "पहला नाम";
-            inputB.placeholder = "दूसरा नाम";
         } else {
             inputText.placeholder = "e.g., Alice Enterprise";
-            categoryCustom.placeholder = "Enter Category Name";
             inputA.placeholder = "A";
-            inputB.placeholder = "B";
         }
     }
 
-    // Event Listener for Language Switch
-    langSwitch.addEventListener('change', (e) => {
-        updateLanguage(e.target.value);
-    });
-
-    // Initialize language
+    langSwitch.addEventListener('change', (e) => updateLanguage(e.target.value));
     updateLanguage(currentLang);
 
-    // --- LOGIC ---
+    // --- TAB SWITCHING ---
+    tabSingle.addEventListener('click', () => switchTab('single'));
+    tabCompat.addEventListener('click', () => switchTab('compat'));
+    tabForecast.addEventListener('click', () => switchTab('forecast'));
 
-    tabSingle.addEventListener('click', () => {
-        sectionSingle.classList.remove('hidden');
-        sectionCompat.classList.add('hidden');
-        tabSingle.classList.add('active');
-        tabCompat.classList.remove('active');
-    });
-
-    tabCompat.addEventListener('click', () => {
+    function switchTab(tabName) {
         sectionSingle.classList.add('hidden');
-        sectionCompat.classList.remove('hidden');
+        sectionCompat.classList.add('hidden');
+        sectionForecast.classList.add('hidden');
+        
         tabSingle.classList.remove('active');
-        tabCompat.classList.add('active');
+        tabCompat.classList.remove('active');
+        tabForecast.classList.remove('active');
+
+        if(tabName === 'single') {
+            sectionSingle.classList.remove('hidden');
+            tabSingle.classList.add('active');
+        } else if(tabName === 'compat') {
+            sectionCompat.classList.remove('hidden');
+            tabCompat.classList.add('active');
+        } else {
+            sectionForecast.classList.remove('hidden');
+            tabForecast.classList.add('active');
+            // Auto-fill DOB if entered in single tab
+            if(inputDob.value && !inputDobFc.value) {
+                inputDobFc.value = inputDob.value;
+            }
+        }
+    }
+
+    // --- FORECAST LOGIC ---
+    btnForecast.addEventListener('click', () => {
+        const dob = inputDobFc.value;
+        const target = inputTargetDate.value;
+        const t = translations[currentLang];
+
+        if(!dob || !target) return alert(currentLang === 'hi' ? "कृपया सभी तिथियां भरें" : "Please enter all dates");
+
+        const dateObj = new Date(target);
+        
+        // 1. Calculate Jeevank (Parent)
+        const jeevank = engine.get_jeevank(dob);
+        
+        // 2. Calculate Varshank (Year)
+        const year = dateObj.getFullYear();
+        const varshank = engine.get_varshank(jeevank, year);
+        const relYear = engine.check_compatibility(jeevank, varshank); // Compare Year vs Life
+
+        // 3. Calculate Masank (Month)
+        const monthIndex = dateObj.getMonth() + 1;
+        const masank = engine.get_masank(varshank, monthIndex);
+        const relMonth = engine.check_compatibility(varshank, masank); // Compare Month vs Year
+
+        // 4. Calculate Dinank (Day)
+        const dayDate = dateObj.getDate();
+        const weekdayVal = engine.get_weekday_value(dateObj);
+        const dinank = engine.get_dinank(masank, dayDate, weekdayVal);
+        const relDay = engine.check_compatibility(masank, dinank); // Compare Day vs Month
+
+        // Update UI
+        updateForecastCard('card-year', varshank, relYear, `${year}`, t);
+        updateForecastCard('card-month', masank, relMonth, dateObj.toLocaleString(currentLang === 'hi' ? 'hi-IN' : 'en-US', { month: 'long' }), t);
+        updateForecastCard('card-day', dinank, relDay, `${dateObj.getDate()} (${dateObj.toLocaleString(currentLang === 'hi' ? 'hi-IN' : 'en-US', { weekday: 'short' })})`, t);
+
+        forecastResultArea.classList.remove('hidden');
     });
 
+    function updateForecastCard(cardId, number, relation, contextText, t) {
+        const card = document.getElementById(cardId);
+        const numEl = card.querySelector('.fc-number');
+        const statusEl = card.querySelector('.fc-status');
+        const ctxEl = card.querySelector('.fc-context');
+
+        numEl.textContent = number;
+        ctxEl.textContent = contextText;
+        
+        let statusText = "";
+        let statusClass = "";
+
+        if(relation === 'Friend') {
+            statusText = t.fc_favorable;
+            statusClass = 'status-Friend';
+        } else if (relation === 'Enemy') {
+            statusText = t.fc_unfavorable;
+            statusClass = 'status-Enemy';
+        } else {
+            statusText = t.fc_normal;
+            statusClass = 'status-Neutral';
+        }
+
+        statusEl.textContent = statusText;
+        
+        // Reset classes
+        card.className = 'forecast-card'; 
+        card.classList.add(statusClass + '-border'); // Add colored border
+    }
+
+    // ... (Existing Event Listeners for other tabs) ...
+    // Note: Re-paste the Calculate and Compare listeners here if you are overwriting the whole file,
+    // or just append the forecast logic if you are editing incrementally.
     categorySelect.addEventListener('change', (e) => {
         if (e.target.value === 'Custom') {
             categoryCustom.classList.remove('hidden');
@@ -171,7 +289,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // --- SINGLE ANALYSIS CALCULATION ---
     btnCalculate.addEventListener('click', () => {
         const text = inputText.value.trim();
         const dob = inputDob.value;
@@ -179,27 +296,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!text || !dob) return alert(t.msg_enter_all);
 
-        // 1. Calculate Name Vibration
         const nameVibration = engine.calculate_vibration(text);
-        
-        // 2. Calculate Date Metrics & Lucky Numbers
         const dateMetrics = engine.calculate_date_metrics(dob);
         const luckyNumbers = engine.get_lucky_numbers(dateMetrics);
-
-        // 3. Analyze Suitability
         const suitability = engine.analyze_name_suitability(nameVibration, dateMetrics.day_number, luckyNumbers);
 
-        // 4. Update UI
         let categoryLabel = categorySelect.options[categorySelect.selectedIndex].text;
-        if (categorySelect.value === 'Custom') {
-            categoryLabel = categoryCustom.value || "Custom";
-        }
+        if (categorySelect.value === 'Custom') categoryLabel = categoryCustom.value || "Custom";
 
-        // Display Profile
         resBasicNum.textContent = dateMetrics.day_number;
         resLuckyList.textContent = luckyNumbers.join(", ");
 
-        // Display Name Vibration
         if(currentLang === 'hi') {
             resultMsg.innerHTML = `${categoryLabel} <strong>"${text}"</strong> ${t.res_vibration}:`;
         } else {
@@ -207,10 +314,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         resultNum.textContent = nameVibration;
 
-        // Display Suitability Badge
-        let suitText = "";
-        let suitClass = "";
-        
+        let suitText = "", suitClass = "";
         if (suitability.code === 'lucky_match') { suitText = t.suit_exc; suitClass = 'status-Friend'; }
         else if (suitability.code === 'friend') { suitText = t.suit_good; suitClass = 'status-Friend'; }
         else if (suitability.code === 'enemy')  { suitText = t.suit_avoid; suitClass = 'status-Enemy'; }
@@ -218,11 +322,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         suitabilityBox.textContent = suitText;
         suitabilityBox.className = `suitability-badge ${suitClass}`;
-
         resultArea.classList.remove('hidden');
     });
 
-    // --- COMPATIBILITY CALCULATION ---
     btnCompare.addEventListener('click', () => {
         const textA = inputA.value.trim();
         const textB = inputB.value.trim();
@@ -243,7 +345,6 @@ document.addEventListener('DOMContentLoaded', () => {
         numADisp.textContent = numA;
         nameBDisp.textContent = textB;
         numBDisp.textContent = numB;
-
         relationStatus.textContent = displayRel;
         relationStatus.className = `relation-badge status-${rawRel}`;
 
@@ -252,7 +353,6 @@ document.addEventListener('DOMContentLoaded', () => {
         } else {
             compatDesc.innerHTML = `${textA} (${numA}) and ${textB} (${numB}) ${t.rel_desc} <strong>${displayRel}s</strong>.`;
         }
-        
         compatResultArea.classList.remove('hidden');
     });
 });

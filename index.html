@@ -28,6 +28,7 @@
         <div class="tabs">
             <button id="tab-single" class="active" data-i18n="tab_single">Single Analysis</button>
             <button id="tab-compat" data-i18n="tab_compat">Compatibility</button>
+            <button id="tab-forecast" data-i18n="tab_forecast">Forecast</button>
         </div>
 
         <!-- SECTION 1: SINGLE ANALYSIS -->
@@ -103,6 +104,61 @@
                     </div>
                 </div>
                 <p id="compat-desc"></p>
+            </div>
+        </section>
+
+        <!-- SECTION 3: FORECAST -->
+        <section id="section-forecast" class="hidden">
+            <div class="input-group">
+                <label data-i18n="lbl_dob">Date of Birth</label>
+                <input type="date" id="input-dob-fc">
+            </div>
+            
+            <div class="input-group">
+                <label data-i18n="lbl_target_date">Target Date</label>
+                <input type="date" id="input-target-date">
+            </div>
+
+            <button id="btn-forecast" class="action-btn" data-i18n="btn_forecast">Get Horoscope</button>
+
+            <div id="forecast-result-area" class="result-box hidden">
+                
+                <!-- Year Card -->
+                <div id="card-year" class="forecast-card">
+                    <div class="fc-left">
+                        <span class="fc-label" data-i18n="fc_year">Yearly Influence</span>
+                        <span class="fc-context big-text"></span>
+                    </div>
+                    <div class="fc-right">
+                        <div class="fc-number"></div>
+                        <div class="fc-status"></div>
+                    </div>
+                </div>
+
+                <!-- Month Card (Indented) -->
+                <div id="card-month" class="forecast-card indented-1">
+                    <div class="fc-left">
+                        <span class="fc-label" data-i18n="fc_month">Monthly Influence</span>
+                        <span class="fc-context big-text"></span>
+                    </div>
+                    <div class="fc-right">
+                        <div class="fc-number"></div>
+                        <div class="fc-status"></div>
+                    </div>
+                </div>
+
+                <!-- Day Card (Indented More) -->
+                <div id="card-day" class="forecast-card indented-2">
+                    <div class="fc-left">
+                        <span class="fc-label" data-i18n="fc_day">Daily Influence</span>
+                        <span class="fc-context big-text"></span>
+                    </div>
+                    <div class="fc-right">
+                        <div class="fc-number"></div>
+                        <div class="fc-status"></div>
+                    </div>
+                </div>
+
             </div>
         </section>
     </main>
