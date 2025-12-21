@@ -277,3 +277,88 @@ input:focus, select:focus {
 
 /* Utilities */
 .hidden { display: none !important; }
+
+/* Paste at the end of style.css */
+
+/* Forecast Cards */
+.forecast-card {
+    background: var(--card-bg);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow-sm);
+    border-left: 6px solid var(--border);
+    transition: all 0.3s ease;
+}
+
+.indented-1 {
+    margin-left: 15px;
+    width: calc(100% - 15px);
+}
+
+.indented-2 {
+    margin-left: 30px;
+    width: calc(100% - 30px);
+}
+
+.fc-left {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+.fc-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 700;
+}
+
+.fc-context.big-text {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-top: 4px;
+}
+
+.fc-right {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.fc-number {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--primary);
+    line-height: 1;
+}
+
+.fc-status {
+    font-size: 0.85rem;
+    font-weight: 600;
+    margin-top: 4px;
+}
+
+/* Status Borders for Forecast Cards */
+.status-Friend-border {
+    border-left-color: var(--friend);
+    background: linear-gradient(to right, rgba(16, 185, 129, 0.05), var(--card-bg));
+}
+.status-Friend-border .fc-status { color: var(--friend); }
+
+.status-Neutral-border {
+    border-left-color: var(--neutral);
+    background: linear-gradient(to right, rgba(100, 116, 139, 0.05), var(--card-bg));
+}
+.status-Neutral-border .fc-status { color: var(--neutral); }
+
+.status-Enemy-border {
+    border-left-color: var(--enemy);
+    background: linear-gradient(to right, rgba(239, 68, 68, 0.05), var(--card-bg));
+}
+.status-Enemy-border .fc-status { color: var(--enemy); }
