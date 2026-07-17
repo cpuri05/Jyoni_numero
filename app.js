@@ -443,17 +443,15 @@ document.addEventListener('DOMContentLoaded', () => {
                     itemDiv.addEventListener('click', function() {
                         inputElement.value = profile.name;
                         inputElement.dataset.profileId = profile.id;
-                        
-                        // Auto-fill DOB if available
-                        if (inputElement === inputText && profile.dob) {
-                            inputDob.value = profile.dob;
-                        } else if (inputElement === inputNameFc && profile.dob) {
-                            inputDobFc.value = profile.dob;
-                        } else if (inputElement === inputNameLoshu && profile.dob) {
-                            inputDobLoshu.value = profile.dob;
-                            if (profile.gender) inputGender.value = profile.gender;
+                        syncName(profile.name, inputElement);
+
+                        if (profile.dob) {
+                            syncDob(profile.dob, null);
                         }
-                        
+                        if (inputElement === inputNameLoshu && profile.gender) {
+                            inputGender.value = profile.gender;
+                        }
+
                         closeAllLists();
                     });
                     listElement.appendChild(itemDiv);
@@ -509,6 +507,27 @@ document.addEventListener('DOMContentLoaded', () => {
     tabNumeroscope.addEventListener('click', () => switchTab('numeroscope'));
     tabProfiles.addEventListener('click', () => switchTab('profiles'));
 
+    // --- CROSS-TAB FIELD SYNC ---
+    // Name fields: inputText (single) <-> inputNameFc (forecast) <-> inputNameLoshu (numeroscope)
+    function syncName(value, source) {
+        if (source !== inputText)       inputText.value = value;
+        if (source !== inputNameFc)     inputNameFc.value = value;
+        if (source !== inputNameLoshu)  inputNameLoshu.value = value;
+    }
+    // DOB fields: inputDob (single) <-> inputDobFc (forecast) <-> inputDobLoshu (numeroscope)
+    function syncDob(value, source) {
+        if (source !== inputDob)        inputDob.value = value;
+        if (source !== inputDobFc)      inputDobFc.value = value;
+        if (source !== inputDobLoshu)   inputDobLoshu.value = value;
+    }
+
+    [inputText, inputNameFc, inputNameLoshu].forEach(el => {
+        el.addEventListener('input', () => syncName(el.value, el));
+    });
+    [inputDob, inputDobFc, inputDobLoshu].forEach(el => {
+        el.addEventListener('change', () => syncDob(el.value, el));
+    });
+
     function switchTab(tabName) {
         sectionSingle.classList.add('hidden');
         sectionCompat.classList.add('hidden');
@@ -531,17 +550,9 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if(tabName === 'forecast') {
             sectionForecast.classList.remove('hidden');
             tabForecast.classList.add('active');
-            // Auto-fill DOB if entered in single tab
-            if(inputDob.value && !inputDobFc.value) {
-                inputDobFc.value = inputDob.value;
-            }
         } else if(tabName === 'numeroscope') {
             sectionNumeroscope.classList.remove('hidden');
             tabNumeroscope.classList.add('active');
-            // Auto-fill DOB if entered in single tab
-            if(inputDob.value && !inputDobLoshu.value) {
-                inputDobLoshu.value = inputDob.value;
-            }
         } else if(tabName === 'profiles') {
             sectionProfiles.classList.remove('hidden');
             tabProfiles.classList.add('active');
