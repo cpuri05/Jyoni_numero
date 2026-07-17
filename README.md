@@ -157,14 +157,22 @@ Then open `http://localhost:8000` in your browser
 ## Technical Details
 
 ### Files Structure
-- `index.html` - Main application interface
-- `app.js` - UI logic, event handlers, and translations
-- `numerology_core.js` - Core numerology calculation engine
-- `storage.js` - Profile storage and management (localStorage)
-- `style.css` - Styling and responsive design
-- `manifest.json` - PWA configuration
-- `service-worker.js` - Offline caching functionality
-- `icons/` - App icons for PWA installation
+```
+Jyoni_numero/
+├── index.html           # Main application interface
+├── app.js               # Orchestrator: DOM event bindings
+├── numerology_core.js   # Core numerology calculation engine
+├── storage.js           # Profile storage and management (localStorage)
+├── style.css            # Styling and responsive design
+├── manifest.json        # PWA configuration
+├── service-worker.js    # Offline caching functionality
+├── js/
+│   ├── translations.js  # i18n strings (English & Hindi)
+│   ├── ui.js            # DOM rendering helpers
+│   ├── tabs.js          # Tab switching, field sync, autocomplete
+│   └── sw-register.js   # Service worker registration
+└── icons/               # App icons for PWA installation
+```
 
 ### Browser Requirements
 - Modern browser with JavaScript enabled
