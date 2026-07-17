@@ -263,6 +263,41 @@ class NumerologyEngine {
         };
     }
 
+    get_favourable_dates(basicNumber) {
+        const friendly = this.get_friendly_numbers(basicNumber);
+        const enemy = this.get_enemy_numbers(basicNumber);
+        const result = { best: [], good: [], neutral: [], avoid: [] };
+        for (let d = 1; d <= 31; d++) {
+            const n = this._get_digital_root(d);
+            if (n === basicNumber)       result.best.push(d);
+            else if (friendly.includes(n)) result.good.push(d);
+            else if (enemy.includes(n))    result.avoid.push(d);
+            else                           result.neutral.push(d);
+        }
+        return result;
+    }
+
+    // --- FAVOURABLE COLOURS ---
+    get_favourable_colours(number, lang = 'en') {
+        const data = {
+            1: { theme_en: 'Leadership',   theme_hi: 'नेतृत्व',       colours: [{ name_en: 'Red',         name_hi: 'लाल',         hex: '#e53e3e' }, { name_en: 'Orange',     name_hi: 'नारंगी',      hex: '#dd6b20' }, { name_en: 'Golden',     name_hi: 'सुनहरा',      hex: '#d69e2e' }] },
+            2: { theme_en: 'Balance',      theme_hi: 'संतुलन',        colours: [{ name_en: 'White',       name_hi: 'सफ़ेद',        hex: '#e2e8f0' }, { name_en: 'Silver',     name_hi: 'चाँदी',       hex: '#a0aec0' }, { name_en: 'Light Blue', name_hi: 'हल्का नीला',  hex: '#63b3ed' }] },
+            3: { theme_en: 'Creativity',   theme_hi: 'रचनात्मकता',    colours: [{ name_en: 'Yellow',      name_hi: 'पीला',         hex: '#ecc94b' }, { name_en: 'Pink',       name_hi: 'गुलाबी',      hex: '#ed64a6' }, { name_en: 'Purple',     name_hi: 'बैंगनी',      hex: '#9f7aea' }] },
+            4: { theme_en: 'Stability',    theme_hi: 'स्थिरता',       colours: [{ name_en: 'Green',       name_hi: 'हरा',          hex: '#38a169' }, { name_en: 'Grey',       name_hi: 'धूसर',         hex: '#718096' }, { name_en: 'Dark Green', name_hi: 'गहरा हरा',    hex: '#276749' }] },
+            5: { theme_en: 'Freedom',      theme_hi: 'स्वतंत्रता',    colours: [{ name_en: 'Light Brown', name_hi: 'हल्का भूरा',  hex: '#c05621' }, { name_en: 'Green',      name_hi: 'हरा',          hex: '#48bb78' }, { name_en: 'Silver',     name_hi: 'चाँदी',       hex: '#a0aec0' }] },
+            6: { theme_en: 'Harmony',      theme_hi: 'सामंजस्य',      colours: [{ name_en: 'White',       name_hi: 'सफ़ेद',        hex: '#e2e8f0' }, { name_en: 'Pink',       name_hi: 'गुलाबी',      hex: '#ed64a6' }, { name_en: 'Light Blue', name_hi: 'हल्का नीला',  hex: '#63b3ed' }] },
+            7: { theme_en: 'Spirituality', theme_hi: 'आध्यात्मिकता',  colours: [{ name_en: 'Light Green', name_hi: 'हल्का हरा',   hex: '#68d391' }, { name_en: 'Grey',       name_hi: 'धूसर',         hex: '#718096' }, { name_en: 'White',      name_hi: 'सफ़ेद',        hex: '#e2e8f0' }] },
+            8: { theme_en: 'Power',        theme_hi: 'शक्ति',         colours: [{ name_en: 'Black',       name_hi: 'काला',         hex: '#1a202c' }, { name_en: 'Dark Blue',  name_hi: 'गहरा नीला',   hex: '#2b4c7e' }, { name_en: 'Grey',       name_hi: 'धूसर',         hex: '#718096' }] },
+            9: { theme_en: 'Completion',   theme_hi: 'पूर्णता',       colours: [{ name_en: 'Red',         name_hi: 'लाल',         hex: '#e53e3e' }, { name_en: 'Crimson',    name_hi: 'गहरा लाल',    hex: '#9b2335' }, { name_en: 'Orange',     name_hi: 'नारंगी',      hex: '#dd6b20' }] }
+        };
+        const entry = data[number];
+        if (!entry) return null;
+        return {
+            theme: lang === 'hi' ? entry.theme_hi : entry.theme_en,
+            colours: entry.colours.map(c => ({ name: lang === 'hi' ? c.name_hi : c.name_en, hex: c.hex }))
+        };
+    }
+
     // --- LO SHU GRID LOGIC ---
 
     reduce_to_single_digit(n) {
