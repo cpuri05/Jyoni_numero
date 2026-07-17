@@ -69,6 +69,14 @@ const translations = {
         interp_theme: "Core Theme:",
         interp_strengths: "Strengths:",
         interp_shadow: "Shadow Traits:",
+        interp_colours: "Favourable Colours:",
+        colour_theme_prefix: "Enhances",
+        interp_dates: "Favourable Dates:",
+        dates_best: "Best",
+        dates_good: "Good",
+        dates_neutral: "Neutral",
+        dates_avoid: "Avoid",
+        dates_footnote: "Applies to dates present in the month",
         dob_analysis_title: "Birth Number Analysis",
         name_analysis_title: "Name/Entity Analysis",
         // Profile Management
@@ -171,6 +179,14 @@ const translations = {
         interp_theme: "मूल विषय:",
         interp_strengths: "शक्तियां:",
         interp_shadow: "छाया गुण:",
+        interp_colours: "अनुकूल रंग:",
+        colour_theme_prefix: "में वृद्धि करता है",
+        interp_dates: "शुभ तिथियाँ:",
+        dates_best: "सर्वश्रेष्ठ",
+        dates_good: "शुभ",
+        dates_neutral: "सामान्य",
+        dates_avoid: "अशुभ",
+        dates_footnote: "माह में उपलब्ध तिथियों पर लागू",
         dob_analysis_title: "जन्म अंक विश्लेषण",
         name_analysis_title: "नाम/वस्तु विश्लेषण",
         // Profile Management
@@ -383,6 +399,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.getElementById('name-interp-strengths').textContent = nameInterpretation.strengths;
                 document.getElementById('name-interp-shadow').textContent = nameInterpretation.shadow;
             }
+
+            // Re-render colour theme labels on language switch
+            renderColourPills('dob', lastBasicNumber);
+            renderColourPills('name', lastVibrationNumber);
+            renderFavourableDates(lastBasicNumber);
         }
     }
 
@@ -673,6 +694,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
+    function renderFavourableDates(basicNumber) {
+        const dates = engine.get_favourable_dates(basicNumber);
+        const grid = document.getElementById('dob-dates-grid');
+        grid.innerHTML = '';
+        for (let d = 1; d <= 31; d++) {
+            const cell = document.createElement('span');
+            cell.className = 'date-cell';
+            cell.textContent = d;
+            if (dates.best.includes(d))        cell.classList.add('date-best');
+            else if (dates.good.includes(d))   cell.classList.add('date-good');
+            else if (dates.avoid.includes(d))  cell.classList.add('date-avoid');
+            else                               cell.classList.add('date-neutral');
+            grid.appendChild(cell);
+        }
+    }
+
+    function renderColourPills(prefix, number) {
+        const data = engine.get_favourable_colours(number, currentLang);
+        if (!data) return;
+        const t = translations[currentLang];
+        const pillsEl = document.getElementById(`${prefix}-colour-pills`);
+        const themeEl = document.getElementById(`${prefix}-colour-theme`);
+        pillsEl.innerHTML = data.colours.map(c => {
+            const hex = c.hex;
+            // Convert hex to rgb for rgba tint
+            const r = parseInt(hex.slice(1,3),16);
+            const g = parseInt(hex.slice(3,5),16);
+            const b = parseInt(hex.slice(5,7),16);
+            return `<span class="colour-pill" style="background:rgba(${r},${g},${b},0.15);color:${hex};border-color:rgba(${r},${g},${b},0.35)">
+                <span class="colour-dot" style="background:${hex}"></span>${c.name}
+            </span>`;
+        }).join('');
+        themeEl.textContent = currentLang === 'hi' ? `${data.theme} ${t.colour_theme_prefix}` : `${t.colour_theme_prefix} ${data.theme}`;
+    }
+
     function renderPlaneAnalysis(analysis, t) {
         // Full Planes
         const fullPlanesList = document.getElementById('full-planes-list');
@@ -775,6 +831,11 @@ document.addEventListener('DOMContentLoaded', () => {
         // Store vibration number for language switching
         lastVibrationNumber = nameVibration;
         lastBasicNumber = dateMetrics.day_number;
+
+        // Render colour pills
+        renderColourPills('dob', dateMetrics.day_number);
+        renderColourPills('name', nameVibration);
+        renderFavourableDates(dateMetrics.day_number);
 
         // Display dual interpretation (DOB + Name)
         const dobInterpretation = engine.get_vibration_interpretation(dateMetrics.day_number, currentLang);
