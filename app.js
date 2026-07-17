@@ -231,7 +231,7 @@ let valYear, valMonth, valDay;
 let statusYear, statusMonth, statusDay;
 
 // Lo Shu Grid Elements
-let inputDobLoshu, inputGender, btnLoshu, loshuResultArea, loshuDriver, loshuConductor, loshuKua, loshuGrid;
+let inputNameLoshu, inputDobLoshu, inputGender, btnLoshu, loshuResultArea, loshuDriver, loshuConductor, loshuKua, loshuGrid;
 
 document.addEventListener('DOMContentLoaded', () => {
     engine = new NumerologyEngine();
@@ -290,6 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
     cardDay = document.getElementById('card-day');
 
     // Lo Shu Grid References
+    inputNameLoshu = document.getElementById('input-name-loshu');
     inputDobLoshu = document.getElementById('input-dob-loshu');
     inputGender = document.getElementById('input-gender');
     btnLoshu = document.getElementById('btn-loshu');
@@ -326,6 +327,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupAutocomplete(inputA, 'autocomplete-list-a');
     setupAutocomplete(inputB, 'autocomplete-list-b');
     setupAutocomplete(inputNameFc, 'autocomplete-list-fc');
+    setupAutocomplete(inputNameLoshu, 'autocomplete-list-loshu', true);
 
 
     // --- LANGUAGE FUNCTION ---
@@ -349,10 +351,12 @@ document.addEventListener('DOMContentLoaded', () => {
             inputText.placeholder = "जैसे: सूर्य";
             inputA.placeholder = "पहला नाम";
             inputNameFc.placeholder = "नाम दर्ज करें";
+            inputNameLoshu.placeholder = "नाम दर्ज करें";
         } else {
             inputText.placeholder = "e.g., Alice";
             inputA.placeholder = "A";
             inputNameFc.placeholder = "Enter name";
+            inputNameLoshu.placeholder = "Enter name";
         }
 
         // Re-render Lo Shu analysis if it exists
@@ -386,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
     updateLanguage(currentLang);
 
     // --- AUTOCOMPLETE FUNCTION ---
-    function setupAutocomplete(inputElement, listId) {
+    function setupAutocomplete(inputElement, listId, showGender = false) {
         const listElement = document.getElementById(listId);
         let currentFocus = -1;
 
@@ -413,7 +417,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     const itemDiv = document.createElement('div');
                     itemDiv.className = 'autocomplete-item';
                     const dobStr = new Date(profile.dob).toLocaleDateString(currentLang === 'hi' ? 'hi-IN' : 'en-US');
-                    itemDiv.innerHTML = `<strong>${profile.name}</strong> (${dobStr})`;
+                    const genderStr = showGender && profile.gender ? ` · ${profile.gender}` : '';
+                    itemDiv.innerHTML = `<strong>${profile.name}</strong> (${dobStr}${genderStr})`;
                     itemDiv.addEventListener('click', function() {
                         inputElement.value = profile.name;
                         inputElement.dataset.profileId = profile.id;
@@ -423,6 +428,9 @@ document.addEventListener('DOMContentLoaded', () => {
                             inputDob.value = profile.dob;
                         } else if (inputElement === inputNameFc && profile.dob) {
                             inputDobFc.value = profile.dob;
+                        } else if (inputElement === inputNameLoshu && profile.dob) {
+                            inputDobLoshu.value = profile.dob;
+                            if (profile.gender) inputGender.value = profile.gender;
                         }
                         
                         closeAllLists();
@@ -591,10 +599,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LO SHU GRID LOGIC ---
     btnLoshu.addEventListener('click', () => {
+        const name = inputNameLoshu.value.trim();
         const dob = inputDobLoshu.value;
         const gender = inputGender.value;
         const t = translations[currentLang];
 
+        if (!name) return alert(currentLang === 'hi' ? 'कृपया नाम दर्ज करें' : 'Please enter a name');
         if (!dob) return alert(currentLang === 'hi' ? 'कृपया जन्म तिथि दर्ज करें' : 'Please enter date of birth');
 
         const result = engine.calculate_lo_shu_grid(dob, gender);
@@ -646,6 +656,21 @@ document.addEventListener('DOMContentLoaded', () => {
         renderPlaneAnalysis(analysis, t);
         
         loshuResultArea.classList.remove('hidden');
+
+        // Save/update profile with numeroscope results
+        storage.saveProfile({
+            name: name,
+            dob: dob,
+            gender: gender,
+            category: 'Person',
+            text: name,
+            entityType: 'Person',
+            basicNumber: result.driver,
+            luckyNumbers: [],
+            vibration: result.conductor,
+            suitability: '',
+            suitabilityCode: ''
+        });
     });
 
     function renderPlaneAnalysis(analysis, t) {

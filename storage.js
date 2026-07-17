@@ -34,6 +34,7 @@ class ProfileStorage {
                 profiles[existingIndex] = {
                     ...profiles[existingIndex],
                     dob: profileData.dob,
+                    gender: profileData.gender || profiles[existingIndex].gender || '',
                     category: profileData.category,
                     text: profileData.text,
                     entityType: profileData.entityType || 'Person',
@@ -59,6 +60,7 @@ class ProfileStorage {
                 id: this._generateId(),
                 name: profileData.name,
                 dob: profileData.dob,
+                gender: profileData.gender || '',
                 category: profileData.category,
                 text: profileData.text,
                 entityType: profileData.entityType || 'Person',
