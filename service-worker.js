@@ -1,4 +1,4 @@
-const CACHE_NAME = 'numerology-v4';
+const CACHE_NAME = 'numerology-v5';
 const ASSETS = [
   './',
   './index.html',
@@ -6,7 +6,11 @@ const ASSETS = [
   './app.js',
   './numerology_core.js',
   './storage.js',
-  './manifest.json'
+  './manifest.json',
+  './js/translations.js',
+  './js/ui.js',
+  './js/tabs.js',
+  './js/sw-register.js'
 ];
 
 self.addEventListener('install', (e) => {
