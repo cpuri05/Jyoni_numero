@@ -146,7 +146,7 @@ export function renderProfiles(profiles, lang, t, onLoad, onDelete) {
         </div>`).join('');
 }
 
-export function updateForecastCard(cardId, number, relation, contextText, t) {
+export function updateForecastCard(cardId, number, relation, contextText, t, insightText) {
     const card = document.getElementById(cardId);
     const numEl    = card.querySelector('.fc-number');
     const statusEl = card.querySelector('.fc-status');
@@ -169,4 +169,17 @@ export function updateForecastCard(cardId, number, relation, contextText, t) {
 
     statusEl.textContent = statusText;
     card.className = `forecast-card ${statusClass}-border`;
+
+    let insightEl = card.querySelector('.fc-insight');
+    if (insightText) {
+        if (!insightEl) {
+            insightEl = document.createElement('div');
+            insightEl.className = 'fc-insight';
+            card.appendChild(insightEl);
+        }
+        insightEl.className = `fc-insight fc-insight-${statusClass.replace('status-', '').toLowerCase()}`;
+        insightEl.textContent = insightText;
+    } else if (insightEl) {
+        insightEl.remove();
+    }
 }

@@ -470,6 +470,183 @@ class NumerologyEngine {
         return analysis;
     }
 
+    // --- NUMBER RELATIONSHIP INSIGHTS ---
+    get_number_relationship_insights(basicNum, lang = 'en') {
+        const data = {
+            1: {
+                friend_en: "You may gain respect and recognition in society and your professional field. People will honor your leadership and guidance. Success is possible in government service, administration, senior management, or politics. Your confidence, courage, and decision-making ability will strengthen. Excellent health, strong immunity, healthy bones, and a strong heart. Family happiness is indicated; your relationship with your father will be warm and supportive.",
+                friend_hi: "समाज और कार्यक्षेत्र में मान-सम्मान मिल सकता है। लोग आपके नेतृत्व और मार्गदर्शन का सम्मान करेंगे। सरकारी नौकरी, प्रशासन, उच्च प्रबंधन या राजनीति में सफलता मिल सकती है। आत्मविश्वास, साहस और निर्णय लेने की क्षमता बढ़ेगी। उत्तम स्वास्थ्य, मजबूत हड्डियां और हृदय स्वस्थ रहेगा। पारिवारिक सुख, पिता के साथ संबंध मधुर और पूर्ण सहयोग प्राप्त हो सकता है।",
+                neutral_en: "Life flows normally. You receive a mixed blend of results from your efforts — neither great highs nor significant lows.",
+                neutral_hi: "जीवन सामान्य रूप से चलता है। व्यक्ति को अपने किए प्रयासों का शुभाशुभ मिश्रित फल मिलता है और कोई बड़ा उतार-चढ़ाव नहीं आता।",
+                enemy_en: "Lack of confidence, loss of reputation, and obstacles in government-related matters. Relationships with your father or superiors may be strained. Despite hard work, recognition may be denied. Headaches, weak eyesight, and joint or bone pain are possible. Decision-making ability weakens and leadership becomes difficult. Tax disputes, police matters, or legal issues may arise.",
+                enemy_hi: "आत्मविश्वास की कमी, यश की हानि, सरकारी कार्यों में बाधा। पिता या उच्चाधिकारियों के साथ संबंध तनावपूर्ण। परिश्रम के बाद भी उचित सम्मान नहीं मिलेगा। सिरदर्द, आँखों की कमज़ोरी, हड्डियों या जोड़ों में दर्द। निर्णय लेने की क्षमता कमजोर और नेतृत्व में कठिनाई। टैक्स, पुलिस, या अदालती मामलों का सामना करना पड़ सकता है।"
+            },
+            2: {
+                friend_en: "Mind stays calm and cheerful; thinking ability and morale are strong. Mental peace and prosperity are attained. Free from depression and anxiety. Good decision-making. Benefits from literature, art, or music. Good health, respect, and fame. Relationship with mother will be warm. Creative interests grow. Travel is possible. Social activities bring joy.",
+                friend_hi: "मन शांत और प्रसन्न रहता है, सोचने-समझने की क्षमता और मनोबल अच्छा रहता है। मानसिक सुख-समृद्धि प्राप्त होती है। अवसाद और घबराहट से मुक्त रहता है। निर्णय क्षमता अच्छी रहती है। साहित्य, कला या संगीत से लाभ। सेहत ठीक, मान-सम्मान और प्रसिद्धि मिलती है। माता से संबंध अच्छे रहेंगे। रचनात्मक कार्य में रुचि बढ़ेगी। यात्रा कर सकते हैं।",
+                neutral_en: "Neither strongly positive nor negative. Emotionally stable, capable of making decisions, and mentally at peace.",
+                neutral_hi: "न बहुत अधिक सकारात्मक और न ही बहुत अधिक नकारात्मक प्रभाव। भावनात्मक रूप से स्थिर, निर्णय लेने में सक्षम और मानसिक शांति रहेगी।",
+                enemy_en: "Mental restlessness, insomnia, and reduced happiness or health of the mother. Cold, cough, excessive or reduced emotional sensitivity, and difficulty making decisions. Disagreements with mother. Travel may be cancelled. Work may stall. Disappointment and depression may trouble you.",
+                enemy_hi: "मानसिक अशांति, अनिद्रा और माता के स्वास्थ्य या सुख में कमी। सर्दी-जुकाम, भावुकता में कमी या अत्यधिक भावुकता और निर्णय लेने में कठिनाई। माता से मतभेद। यात्रा रद्द हो सकती है। कार्य अटक सकते हैं। निराशा व अवसाद तंग कर सकता है।"
+            },
+            3: {
+                friend_en: "Knowledge, good fortune, wealth, and prosperity may come. Charitable and spiritual inclinations grow. Sound decisions, respect, and good health. Financial savings, business success, and economic stability. Happiness from spouse and children. Thoughts become noble and compassionate. Success in education, new contacts, new opportunities, and advancement in career. Religious and spiritual interests deepen.",
+                friend_hi: "ज्ञान, सौभाग्य, धन और समृद्धि आ सकती है। दान, आध्यात्मिक रुचि हो सकती है। सही निर्णय, मान-सम्मान और अच्छा स्वास्थ्य। धन संचय, व्यापार में सफलता और आर्थिक स्थिरता। जीवनसाथी और संतान सुख। विचार सात्विक और दयालु। शिक्षा में सफलता, नए संपर्क, नए अवसर और उन्नति। धार्मिक व अध्यात्मिक रुचि बढ़ेगी।",
+                neutral_en: "Neither loss nor gain. Life continues as it is. Results are proportional to effort.",
+                neutral_hi: "न हानि होती है और न ही कोई लाभ। जीवन जैसा है वैसा चलता रहता है। जैसा प्रयास वैसा लाभ होता है।",
+                enemy_en: "Obstacles in education, financial loss, delays in marriage or marital tension, and digestive or stomach health issues. Debt may increase, happiness from children may reduce, loss of reputation, arguments, lack of concentration, inability to make decisions, and reduced self-confidence. Blessings from elders may be withheld.",
+                enemy_hi: "शिक्षा में रुकावट, धन हानि, विवाह में देरी या वैवाहिक जीवन में तनाव और पेट या पाचन से जुड़े स्वास्थ्य रोग। ऋण का बढ़ना, संतान सुख में कमी, अपयश, वाद-विवाद, एकाग्रता में कमी, निर्णय न ले पाना, आत्मविश्वास की कमी। बड़ों का आशीर्वाद नहीं मिलता।"
+            },
+            4: {
+                friend_en: "Sudden major success, financial gains, high position in politics or institutions, and sharp intellect. Even seemingly impossible tasks can be accomplished.",
+                friend_hi: "अचानक बड़ी सफलता, धनलाभ, राजनीति या प्रतिष्ठान में उच्च पद और तीव्र बुद्धि। असंभव कार्यों को भी संभव बना देता है।",
+                neutral_en: "Sudden ups and downs, unexpected gains, or minor obstacles. Occasional indecision, confusion, or uncertainty.",
+                neutral_hi: "अचानक उतार-चढ़ाव, अप्रत्याशित लाभ या छोटी-मोटी अड़चनें। कभी-कभी अनिर्णय, भ्रम व असमंजस की स्थिति।",
+                enemy_en: "Anger and ego will increase. Jealousy of others, mental confusion and instability. Despite efforts, work will not succeed. Tasks will fail at the last moment. Pointless arguments and excessive running around. Sudden financial loss, mental confusion, unknown fears, and physical suffering due to bad habits.",
+                enemy_hi: "मन में क्रोध व अहंकार बढ़ेगा। दूसरों से ईर्ष्या, मन में भ्रम और अस्थिरता। प्रयास करने पर भी काम नहीं बनेंगे। आखिरी क्षणों में कार्य खराब हो जाएंगे। व्यर्थ का वाद-विवाद। अचानक धन हानि, मानसिक भ्रम, अज्ञात भय और शारीरिक कष्ट।"
+            },
+            5: {
+                friend_en: "Logical ability, eloquence, and memory will improve. Youthful vitality increases. Sweet speech, business profits, mathematical aptitude, immense success and fame in media, and enhanced writing ability.",
+                friend_hi: "तार्किक क्षमता बढ़ेगी, वाकपटुता व स्मृति बढ़ेगी, यौवन में ओज आ जाता है। वाणी में मधुरता, व्यापार में लाभ, गणित में निपुणता, मीडिया में अपार सफलता और यश, लेखन क्षमता बढ़ जाती है।",
+                neutral_en: "Average results — neither gain nor loss. Curiosity increases but laziness may also creep in.",
+                neutral_hi: "सामान्य फल होगा, लाभ नहीं होगा तो हानि भी नहीं होगी। जिज्ञासा बढ़ेगी पर आलस्य भी सताएगा।",
+                enemy_en: "Flaws in mind and speech, difficulty making decisions, business losses, skin diseases, and conflicts with friends, sisters, or aunts. Memory weakens, confusion and communication gaps arise. Skin and nerve-related ailments possible. Plans fail, conflicts with colleagues, and unnecessary obstacles in business.",
+                enemy_hi: "मन व वाणी में दोष, निर्णय लेने में परेशानी, व्यापार में नुकसान, त्वचा रोग, और मित्र, बहन, बुआ या मौसी से अनबन। स्मृति में कमी, भ्रम व संवाद में कमी। त्वचा व नसों संबंधी रोग। योजनाओं में असफलता, सहकर्मियों से विवाद।"
+            },
+            6: {
+                friend_en: "Favorable period. Sudden financial gains, increased luxury, happiness and benefits from women, success in romantic relationships, growing happiness and respect. Many positive changes come.",
+                friend_hi: "अनुकूल, अचानक धन लाभ, विलासिता बढ़ेगी, स्त्री से सुख व लाभ, प्रेम संबंधों में सफलता, सुख बढ़ता है, मान-सम्मान बढ़ता है। कई सकारात्मक बदलाव आते हैं।",
+                neutral_en: "Normal, mixed results — average and stable. Material comforts and relationships remain in a steady state.",
+                neutral_hi: "सामान्य, शुभाशुभ मिश्रित, औसत और स्थिर फल। भौतिक सुख-सुविधाओं और संबंधों में सामान्य स्थिति बनी रहती है।",
+                enemy_en: "Time will be unfavorable. Work will go wrong or stall. Arguments with wife or women. Avoid anger and laziness. Relationships will deteriorate. Loss of reputation possible. Business may slow down. Struggles, domestic conflicts, health will be delicate, and challenges in the workplace.",
+                enemy_hi: "समय प्रतिकूल रहेगा। कार्य बिगड़ेंगे या अटक जाएंगे। पत्नी या महिला से वाद-विवाद। क्रोध और आलस्य से बचें। दूसरों से संबंध बिगड़ेंगे। अपयश हो सकता है। व्यापार में मंदा। संघर्ष, गृहक्लेश, स्वास्थ्य नरम रहेगा।"
+            },
+            7: {
+                friend_en: "Sudden financial gains, deep interest in spirituality, increased courage and valor, mastery of hidden or occult knowledge, enemies are defeated, and unexpected success may come.",
+                friend_hi: "अचानक धन लाभ, अध्यात्म में गहरी रुचि, साहस व पराक्रम बढ़ता है, गुप्त विद्याओं में निपुणता, शत्रु परास्त होते हैं और अप्रत्याशित सफलता मिल सकती है।",
+                neutral_en: "Normal, with manageable ups and downs. Interest in spirituality and mystical subjects grows. Some instability and confusion in all areas.",
+                neutral_hi: "सामान्य, उतार-चढ़ाव आते हैं लेकिन सहन करने योग्य होते हैं। अध्यात्म में रुचि और मन उचाट रहता है। रहस्यमयी विद्याओं में रुचि। चारों ओर अस्थिरता और भ्रम की स्थिति।",
+                enemy_en: "Work will fall apart at the last moment. Close ones may behave like strangers. Excessive running around. Arguments possible. Anger and laziness will cause harm. Betrayal is possible. Work will slow down. Thoughts of starting something new. Transfer or change of residence possible.",
+                enemy_hi: "काम बनते-बनते बिगड़ जाएगा, अपने परायों जैसा व्यवहार करेंगे। भाग-दौड़ अधिक रहेगी। वाद-विवाद हो सकता है। क्रोध व आलस्य हानि कराएंगे। धोखा मिल सकता है। कार्य में मंदा होगा। स्थानांतरण हो सकता है।"
+            },
+            8: {
+                friend_en: "Hard work will be rewarded. Greater activity brings greater gains. Travel is possible, advancement likely, financial gains, support from colleagues, and new opportunities will arise.",
+                friend_hi: "परिश्रम का फल मिलेगा। सक्रियता अधिक लाभ कराएगी, यात्रा हो सकती है, उन्नति हो सकती है, धनलाभ, सहकर्मियों से सहयोग, नए अवसर मिलेंगे।",
+                neutral_en: "Mixed results. Close ones may behave unexpectedly. Lack of focus in work. Time passes in an ordinary manner.",
+                neutral_hi: "मिलेजुले फल मिलेंगे, अपने परायों जैसा व्यवहार कर सकते हैं। कार्य में मन नहीं लगेगा। सामान्य ढंग से समय बीतता जाएगा।",
+                enemy_en: "Recklessness may cause physical harm. Avoid haste. Greed will lead to loss. Procrastination will be harmful. Arguments or fights with others possible. Don't get entangled unnecessarily. Laziness will leave work incomplete. Hard work goes unrewarded. Delays in tasks. Travel yields no benefit.",
+                enemy_hi: "दुस्साहस शारीरिक कष्ट दे सकता है। जल्दबाजी से बचें। लालच करने में हानि होगी। टालमटोल हानि करायेगी। दूजों से वाद-विवाद या लड़ाई झगड़ा हो सकता है। आलस्य के कारण कार्य अधूरे रह जाएंगे। परिश्रम का फल नहीं मिलता। यात्रा का लाभ नहीं मिलता।"
+            },
+            9: {
+                friend_en: "Work will succeed. New opportunities and contacts will grow. With little effort, tasks will be accomplished. Respect and recognition will increase. The day will be filled with happiness and prosperity. Courage will bring fame and gain.",
+                friend_hi: "कार्य बनेंगे। नए अवसर मिलेंगे। नए संपर्क बढ़ेंगे। थोड़े से प्रयास से काम बन जाएंगे। मान-सम्मान बढ़ेगा। दिन सुख-समृद्धि से भरपूर रहेगा। साहस यश व लाभ कराएगा।",
+                neutral_en: "Normal time passes. Neither gain nor loss. Relationships with siblings remain ordinary. Travel yields no benefit. Time may be wasted.",
+                neutral_hi: "सामान्य समय बीतता है। लाभ नहीं होता है तो हानि भी नहीं होती है। भाई-बहिनों से संबंध सामान्य रहते हैं। यात्रा का लाभ नहीं मिलता। समय व्यर्थ जाता है।",
+                enemy_en: "Recklessness increases. Excessive anger, blood-related problems, property disputes, and debt may arise. Self-confidence decreases, relationships with siblings deteriorate, and there is an increased risk of accidents or legal entanglements. Avoid greed, haste, and ego.",
+                enemy_hi: "दुस्साहस बढ़ता है। अत्यधिक गुस्सा, रक्त संबंधी समस्याएं, संपत्ति के विवाद और कर्ज का सामना करना पड़ सकता है। आत्मविश्वास कम हो जाता है, भाइयों से रिश्ते बिगड़ते हैं, तथा दुर्घटना या कोर्ट-कचहरी के मामलों में फंसने की संभावना बढ़ जाती है। लालच, जल्दबाजी व अहंकार से बचना चाहिए।"
+            }
+        };
+
+        const rel = this.RELATIONSHIPS[basicNum];
+        if (!rel) return null;
+
+        const result = { friends: [], neutrals: [], enemies: [] };
+        const pick = (num, type) => {
+            const d = data[num];
+            if (!d) return;
+            const text = lang === 'hi' ? d[`${type}_hi`] : d[`${type}_en`];
+            return { num, text };
+        };
+
+        rel.friends.forEach(n => { const r = pick(n, 'friend');  if (r) result.friends.push(r); });
+        rel.neutral.forEach(n => { const r = pick(n, 'neutral'); if (r) result.neutrals.push(r); });
+        rel.enemy.forEach(n  => { const r = pick(n, 'enemy');   if (r) result.enemies.push(r); });
+
+        return result;
+    }
+
+    // --- NUMBER RELATIONSHIP INSIGHTS ---
+    get_number_relationship_insights(num, relation, lang = 'en') {
+        const data = {
+            1: {
+                friend_en: "You may gain respect and recognition in society and your professional field. People will honor your leadership and guidance. Success is possible in government service, administration, senior management, or politics. Your confidence, courage, and decision-making ability will strengthen. Excellent health, strong immunity, healthy bones, and a strong heart. Family happiness is indicated; your relationship with your father will be warm and supportive.",
+                friend_hi: "समाज और कार्यक्षेत्र में मान-सम्मान मिल सकता है। लोग आपके नेतृत्व और मार्गदर्शन का सम्मान करेंगे। सरकारी नौकरी, प्रशासन, उच्च प्रबंधन या राजनीति में सफलता मिल सकती है। आत्मविश्वास, साहस और निर्णय लेने की क्षमता बढ़ेगी। उत्तम स्वास्थ्य, मजबूत हड्डियां और हृदय स्वस्थ रहेगा। पारिवारिक सुख, पिता के साथ संबंध मधुर और पूर्ण सहयोग प्राप्त हो सकता है।",
+                neutral_en: "Life flows normally. You receive a mixed blend of results from your efforts — neither great highs nor significant lows.",
+                neutral_hi: "जीवन सामान्य रूप से चलता है। व्यक्ति को अपने किए प्रयासों का शुभाशुभ मिश्रित फल मिलता है और कोई बड़ा उतार-चढ़ाव नहीं आता।",
+                enemy_en: "Lack of confidence, loss of reputation, and obstacles in government-related matters. Relationships with your father or superiors may be strained. Despite hard work, recognition may be denied. Headaches, weak eyesight, and joint or bone pain are possible. Decision-making weakens and leadership becomes difficult. Tax disputes, police matters, or legal issues may arise.",
+                enemy_hi: "आत्मविश्वास की कमी, यश की हानि, सरकारी कार्यों में बाधा। पिता या उच्चाधिकारियों के साथ संबंध तनावपूर्ण। परिश्रम के बाद भी उचित सम्मान नहीं मिलेगा। सिरदर्द, आँखों की कमज़ोरी, और हड्डियों या जोड़ों में दर्द। टैक्स, पुलिस, या अदालती मामलों का सामना करना पड़ सकता है।"
+            },
+            2: {
+                friend_en: "Mind stays calm and cheerful; thinking ability and morale are strong. Mental peace and prosperity are attained. Free from depression and anxiety. Good decision-making. Benefits from literature, art, or music. Good health, respect, and fame. Relationship with mother will be warm. Creative interests grow. Travel is possible.",
+                friend_hi: "मन शांत और प्रसन्न रहता है, सोचने-समझने की क्षमता और मनोबल अच्छा रहता है। मानसिक सुख-समृद्धि प्राप्त होती है। अवसाद और घबराहट से मुक्त रहता है। साहित्य, कला या संगीत के क्षेत्र से लाभ। माता से संबंध अच्छे रहेंगे। रचनात्मक कार्य में रुचि बढ़ेगी। यात्रा कर सकते हैं।",
+                neutral_en: "Neither strongly positive nor negative. Emotionally stable, capable of making decisions, and mentally at peace.",
+                neutral_hi: "न बहुत अधिक सकारात्मक और न ही बहुत अधिक नकारात्मक प्रभाव। भावनात्मक रूप से स्थिर, निर्णय लेने में सक्षम और मानसिक शांति रहेगी।",
+                enemy_en: "Mental restlessness, insomnia, and reduced happiness or health of the mother. Cold, cough, excessive or reduced emotional sensitivity, and difficulty making decisions. Disagreements with mother. Travel may be cancelled. Work may stall. Disappointment and depression may trouble you.",
+                enemy_hi: "मानसिक अशांति, अनिद्रा और माता के स्वास्थ्य या सुख में कमी। सर्दी-जुकाम, भावुकता में कमी या अत्यधिक भावुकता और निर्णय लेने में कठिनाई। माता से मतभेद। यात्रा रद्द हो सकती है। कार्य अटक सकते हैं। निराशा व अवसाद तंग कर सकता है।"
+            },
+            3: {
+                friend_en: "Knowledge, good fortune, wealth, and prosperity may come. Charitable and spiritual inclinations grow. Sound decisions, respect, and good health. Financial savings, business success, and economic stability. Happiness from spouse and children. Success in education, new contacts, new opportunities, and career advancement. Religious and spiritual interests deepen.",
+                friend_hi: "ज्ञान, सौभाग्य, धन और समृद्धि आ सकती है। दान, आध्यात्मिक रुचि हो सकती है। सही निर्णय, मान-सम्मान और अच्छा स्वास्थ्य। धन संचय, व्यापार में सफलता और आर्थिक स्थिरता। जीवनसाथी और संतान सुख। शिक्षा में सफलता, नए संपर्क, नए अवसर और उन्नति। धार्मिक व अध्यात्मिक रुचि बढ़ेगी।",
+                neutral_en: "Neither loss nor gain. Life continues as it is. Results are proportional to effort.",
+                neutral_hi: "न हानि होती है और न ही कोई लाभ। जीवन जैसा है वैसा चलता रहता है। जैसा प्रयास वैसा लाभ होता है।",
+                enemy_en: "Obstacles in education, financial loss, delays in marriage or marital tension, and digestive or stomach health issues. Debt may increase, happiness from children may reduce, loss of reputation, arguments, lack of concentration, and reduced self-confidence. Blessings from elders may be withheld.",
+                enemy_hi: "शिक्षा में रुकावट, धन हानि, विवाह में देरी या वैवाहिक जीवन में तनाव और पेट या पाचन से जुड़े स्वास्थ्य रोग। ऋण का बढ़ना, संतान सुख में कमी, अपयश, वाद-विवाद, एकाग्रता में कमी, आत्मविश्वास की कमी। बड़ों का आशीर्वाद नहीं मिलता।"
+            },
+            4: {
+                friend_en: "Sudden major success, financial gains, high position in politics or institutions, and sharp intellect. Even seemingly impossible tasks can be accomplished.",
+                friend_hi: "अचानक बड़ी सफलता, धनलाभ, राजनीति या प्रतिष्ठान में उच्च पद और तीव्र बुद्धि। असंभव कार्यों को भी संभव बना देता है।",
+                neutral_en: "Sudden ups and downs, unexpected gains, or minor obstacles. Occasional indecision, confusion, or uncertainty.",
+                neutral_hi: "अचानक उतार-चढ़ाव, अप्रत्याशित लाभ या छोटी-मोटी अड़चनें। कभी-कभी अनिर्णय, भ्रम व असमंजस की स्थिति।",
+                enemy_en: "Anger and ego will increase. Jealousy of others, mental confusion and instability. Despite efforts, work will not succeed. Tasks will fail at the last moment. Pointless arguments and excessive running around. Sudden financial loss, mental confusion, unknown fears, and physical suffering due to bad habits.",
+                enemy_hi: "मन में क्रोध व अहंकार बढ़ेगा। दूसरों से ईर्ष्या, मन में भ्रम और अस्थिरता। प्रयास करने पर भी काम नहीं बनेंगे। आखिरी क्षणों में कार्य खराब हो जाएंगे। व्यर्थ का वाद-विवाद। अचानक धन हानि, मानसिक भ्रम, अज्ञात भय और शारीरिक कष्ट।"
+            },
+            5: {
+                friend_en: "Logical ability, eloquence, and memory will improve. Youthful vitality increases. Sweet speech, business profits, mathematical aptitude, immense success and fame in media, and enhanced writing ability.",
+                friend_hi: "तार्किक क्षमता बढ़ेगी, वाकपटुता व स्मृति बढ़ेगी, यौवन में ओज आ जाता है। वाणी में मधुरता, व्यापार में लाभ, गणित में निपुणता, मीडिया के क्षेत्र में अपार सफलता और यश, लेखन क्षमता बढ़ जाती है।",
+                neutral_en: "Average results — neither gain nor loss. Curiosity increases but laziness may also creep in.",
+                neutral_hi: "सामान्य फल होगा, लाभ नहीं होगा तो हानि भी नहीं होगी। जिज्ञासा बढ़ेगी पर आलस्य भी सताएगा।",
+                enemy_en: "Flaws in mind and speech, difficulty making decisions, business losses, skin diseases, and conflicts with friends, sisters, or aunts. Memory weakens, confusion and communication gaps arise. Plans fail, conflicts with colleagues, and unnecessary obstacles in business.",
+                enemy_hi: "मन व वाणी में दोष, निर्णय लेने में परेशानी, व्यापार में नुकसान, त्वचा रोग, और मित्र, बहन, बुआ या मौसी से अनबन। स्मृति में कमी, भ्रम व संवाद में कमी। त्वचा व नसों संबंधी रोग। योजनाओं में असफलता, सहकर्मियों से विवाद।"
+            },
+            6: {
+                friend_en: "Favorable period. Sudden financial gains, increased luxury, happiness and benefits from women, success in romantic relationships, growing happiness and respect. Many positive changes come.",
+                friend_hi: "अनुकूल, अचानक धन लाभ, विलासिता बढ़ेगी, स्त्री से सुख व लाभ, प्रेम संबंधों में सफलता, सुख बढ़ता है, मान-सम्मान बढ़ता है। कई सकारात्मक बदलाव आते हैं।",
+                neutral_en: "Normal, mixed results — average and stable. Material comforts and relationships remain in a steady state.",
+                neutral_hi: "सामान्य, शुभाशुभ मिश्रित, औसत और स्थिर फल। भौतिक सुख-सुविधाओं और संबंधों में सामान्य स्थिति बनी रहती है।",
+                enemy_en: "Time will be unfavorable. Work will go wrong or stall. Arguments with wife or women. Avoid anger and laziness. Relationships will deteriorate. Loss of reputation possible. Business may slow down. Struggles, domestic conflicts, health will be delicate, and challenges in the workplace.",
+                enemy_hi: "समय प्रतिकूल रहेगा। कार्य बिगड़ेंगे या अटक जाएंगे। पत्नी या महिला से वाद-विवाद। क्रोध करने से बचें और आलस्य न करें। दूसरों से संबंध बिगड़ेंगे। अपयश हो सकता है। व्यापार में मंदा। संघर्ष, गृहक्लेश, स्वास्थ्य नरम रहेगा।"
+            },
+            7: {
+                friend_en: "Sudden financial gains, deep interest in spirituality, increased courage and valor, mastery of hidden or occult knowledge, enemies are defeated, and unexpected success may come.",
+                friend_hi: "अचानक धन लाभ, अध्यात्म में गहरी रुचि, साहस व पराक्रम बढ़ता है, गुप्त विद्याओं में निपुणता, शत्रु परास्त होते हैं और अप्रत्याशित सफलता मिल सकती है।",
+                neutral_en: "Normal, with manageable ups and downs. Interest in spirituality and mystical subjects grows. Some instability and confusion in all areas.",
+                neutral_hi: "सामान्य, उतार-चढ़ाव आते हैं लेकिन सहन करने योग्य होते हैं। अध्यात्म में रुचि और रहस्यमयी विद्याओं में रुचि उत्पन्न होती है। चारों ओर अस्थिरता और भ्रम की स्थिति।",
+                enemy_en: "Work will fall apart at the last moment. Close ones may behave like strangers. Excessive running around. Arguments possible. Anger and laziness will cause harm. Betrayal is possible. Work will slow down. Transfer or change of residence possible.",
+                enemy_hi: "काम बनते-बनते बिगड़ जाएगा, अपने परायों जैसा व्यवहार करेंगे। भाग-दौड़ अधिक रहेगी। वाद-विवाद हो सकता है। क्रोध व आलस्य हानि कराएंगे। धोखा मिल सकता है। कार्य में मंदा होगा। स्थानांतरण हो सकता है।"
+            },
+            8: {
+                friend_en: "Hard work will be rewarded. Greater activity brings greater gains. Travel is possible, advancement likely, financial gains, support from colleagues, and new opportunities will arise.",
+                friend_hi: "परिश्रम का फल मिलेगा। सक्रियता अधिक लाभ कराएगी, यात्रा हो सकती है, उन्नति हो सकती है, धनलाभ, सहकर्मियों से सहयोग, नए अवसर मिलेंगे।",
+                neutral_en: "Mixed results. Close ones may behave unexpectedly. Lack of focus in work. Time passes in an ordinary manner.",
+                neutral_hi: "मिलेजुले फल मिलेंगे, अपने परायों जैसा व्यवहार कर सकते हैं। कार्य में मन नहीं लगेगा। सामान्य ढंग से समय बीतता जाएगा।",
+                enemy_en: "Recklessness may cause physical harm. Avoid haste. Greed will lead to loss. Procrastination will be harmful. Arguments or fights with others possible. Laziness will leave work incomplete. Hard work goes unrewarded. Delays in tasks. Travel yields no benefit.",
+                enemy_hi: "दुस्साहस शारीरिक कष्ट दे सकता है। जल्दबाजी से बचें। लालच करने में हानि होगी। टालमटोल हानि करायेगी। दूजों से वाद-विवाद या लड़ाई झगड़ा हो सकता है। आलस्य के कारण कार्य अधूरे रह जाएंगे। परिश्रम का फल नहीं मिलता। यात्रा का लाभ नहीं मिलता।"
+            },
+            9: {
+                friend_en: "Work will succeed. New opportunities and contacts will grow. With little effort, tasks will be accomplished. Respect and recognition will increase. The period will be filled with happiness and prosperity. Courage will bring fame and gain.",
+                friend_hi: "कार्य बनेंगे। नए अवसर मिलेंगे। नए संपर्क बढ़ेंगे। थोड़े से प्रयास से काम बन जाएंगे। मान-सम्मान बढ़ेगा। दिन सुख-समृद्धि से भरपूर रहेगा। साहस यश व लाभ कराएगा।",
+                neutral_en: "Normal time passes. Neither gain nor loss. Relationships with siblings remain ordinary. Travel yields no benefit. Time may be wasted.",
+                neutral_hi: "सामान्य समय बीतता है। लाभ नहीं होता है तो हानि भी नहीं होती है। भाई-बहिनों से संबंध सामान्य रहते हैं। यात्रा का लाभ नहीं मिलता। समय व्यर्थ जाता है।",
+                enemy_en: "Recklessness increases. Excessive anger, blood-related problems, property disputes, and debt may arise. Self-confidence decreases, relationships with siblings deteriorate, and there is an increased risk of accidents or legal entanglements. Avoid greed, haste, and ego.",
+                enemy_hi: "दुस्साहस बढ़ता है। अत्यधिक गुस्सा, रक्त संबंधी समस्याएं, संपत्ति के विवाद और कर्ज का सामना करना पड़ सकता है। आत्मविश्वास कम हो जाता है, भाइयों से रिश्ते बिगड़ते हैं, तथा दुर्घटना या कोर्ट-कचहरी के मामलों में फंसने की संभावना बढ़ जाती है। लालच, जल्दबाजी व अहंकार से बचना चाहिए।"
+            }
+        };
+        const entry = data[num];
+        if (!entry) return null;
+        const relKey = relation === 'Friend' ? 'friend' : relation === 'Enemy' ? 'enemy' : 'neutral';
+        return lang === 'hi' ? entry[`${relKey}_hi`] : entry[`${relKey}_en`];
+    }
+
     calculate_lo_shu_grid(dob, gender) {
         const dateObj = new Date(dob);
         const day = dateObj.getDate();

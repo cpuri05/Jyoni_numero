@@ -154,9 +154,23 @@
                 
                 <!-- Suitability Verdict -->
                 <div id="suitability-box" class="suitability-badge"></div>
+
+                <!-- Detailed Number Insights -->
+                <div id="insights-section" class="insights-section hidden">
+                    <button class="insights-toggle" id="insights-toggle" onclick="this.closest('#insights-section').classList.toggle('open')">
+                        <span data-i18n="insights_title">Detailed Number Insights</span>
+                        <span class="insights-chevron">▼</span>
+                    </button>
+                    <div class="insights-body">
+                        <div id="insights-friend" class="insights-group"></div>
+                        <div id="insights-neutral" class="insights-group"></div>
+                        <div id="insights-enemy" class="insights-group"></div>
+                    </div>
+                </div>
                 
                 <!-- Save Profile Button -->
                 <button id="btn-save-profile" class="save-profile-btn" data-i18n="btn_save">💾 Save Profile</button>
+                <button id="btn-download-report" class="save-profile-btn" style="background:var(--accent-secondary,#4a7c59)" data-i18n="btn_download_report">📄 Download Report</button>
             </div>
         </section>
 

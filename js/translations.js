@@ -106,7 +106,12 @@ export const translations = {
         import_merged: "profiles merged with existing data",
         import_replaced: "All profiles replaced with imported data",
         import_error: "Error importing file. Please check the file format.",
-        no_file_selected: "Please select a file to import"
+        no_file_selected: "Please select a file to import",
+        insights_title: "Detailed Number Insights",
+        insights_friend_heading: "🟢 Your Friendly Numbers & Their Influence",
+        insights_neutral_heading: "🟡 Your Neutral Numbers & Their Influence",
+        insights_enemy_heading: "🔴 Your Enemy Numbers & Their Influence",
+        btn_download_report: "📄 Download Report"
     },
     hi: {
         app_title: "अंकज्योतिष",
@@ -215,6 +220,11 @@ export const translations = {
         import_merged: "प्रोफाइल मौजूदा डेटा के साथ मिला दिए गए",
         import_replaced: "सभी प्रोफाइल इम्पोर्टेड डेटा से बदल दिए गए",
         import_error: "फाइल इम्पोर्ट करने में त्रुटि। कृपया फाइल फॉर्मेट जांचें।",
-        no_file_selected: "कृपया इम्पोर्ट करने के लिए फाइल चुनें"
+        no_file_selected: "कृपया इम्पोर्ट करने के लिए फाइल चुनें",
+        insights_title: "विस्तृत अंक विश्लेषण",
+        insights_friend_heading: "🟢 आपके मित्र अंक और उनका प्रभाव",
+        insights_neutral_heading: "🟡 आपके सम अंक और उनका प्रभाव",
+        insights_enemy_heading: "🔴 आपके शत्रु अंक और उनका प्रभाव",
+        btn_download_report: "📄 रिपोर्ट डाउनलोड करें"
     }
 };
