@@ -11,6 +11,7 @@ let lastAnalysisData = null;
 let lastLoshuResult = null;
 let lastVibrationNumber = null;
 let lastBasicNumber = null;
+let lastForecastData = null;
 
 document.addEventListener('DOMContentLoaded', () => {
     engine  = new NumerologyEngine();
@@ -59,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const loshuGrid       = document.getElementById('loshu-grid');
 
     const btnSaveProfile   = document.getElementById('btn-save-profile');
+    const btnDownloadReport = document.getElementById('btn-download-report');
     const saveModal        = document.getElementById('save-modal');
     const modalProfileName = document.getElementById('modal-profile-name');
     const modalSave        = document.getElementById('modal-save');
@@ -81,6 +83,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- LANGUAGE ---
     function t() { return translations[currentLang]; }
+
+    function renderForecastCards(forecastData, tr) {
+        const dateObj = new Date(forecastData.target);
+        updateForecastCard('card-year',  forecastData.varshank, forecastData.yearRel,  `${dateObj.getFullYear()}`, tr, engine.get_number_relationship_insights(forecastData.varshank, forecastData.yearRel, currentLang));
+        updateForecastCard('card-month', forecastData.masank,   forecastData.monthRel, dateObj.toLocaleString(forecastData.locale, { month: 'long' }), tr, engine.get_number_relationship_insights(forecastData.masank, forecastData.monthRel, currentLang));
+        updateForecastCard('card-day',   forecastData.dinank,   forecastData.dayRel,   `${dateObj.getDate()} (${dateObj.toLocaleString(forecastData.locale, { weekday: 'short' })})`, tr, engine.get_number_relationship_insights(forecastData.dinank, forecastData.dayRel, currentLang));
+        forecastResultArea.classList.toggle('hidden', false);
+    }
 
     function updateLanguage(lang) {
         currentLang = lang;
@@ -130,6 +140,10 @@ document.addEventListener('DOMContentLoaded', () => {
             renderColourPills('dob',  lastBasicNumber,    engine, currentLang, tr);
             renderColourPills('name', lastVibrationNumber, engine, currentLang, tr);
             renderFavourableDates(lastBasicNumber, engine);
+        }
+
+        if (lastForecastData) {
+            renderForecastCards(lastForecastData, tr);
         }
     }
 
@@ -220,6 +234,9 @@ document.addEventListener('DOMContentLoaded', () => {
         suitabilityBox.textContent = suit.text;
         suitabilityBox.className   = `suitability-badge ${suit.cls}`;
         resultArea.classList.remove('hidden');
+
+        // Render detailed insights
+        renderInsights(dateMetrics.day_number, t());
     });
 
     // --- COMPATIBILITY ---
@@ -253,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const dob    = inputDobFc.value;
         const target = inputTargetDate.value;
         const tr     = t();
-        if (!name)         return alert(currentLang === 'hi' ? 'कृपया नाम दर्ज करें' : 'Please enter name');
+        if (!name)          return alert(currentLang === 'hi' ? 'कृपया नाम दर्ज करें' : 'Please enter name');
         if (!dob || !target) return alert(currentLang === 'hi' ? 'कृपया सभी तिथियां भरें' : 'Please enter all dates');
 
         const dateObj   = new Date(target);
@@ -263,9 +280,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const dinank    = engine.get_dinank(masank, dateObj.getDate(), engine.get_weekday_value(dateObj));
         const locale    = currentLang === 'hi' ? 'hi-IN' : 'en-US';
 
-        updateForecastCard('card-year',  varshank, engine.check_compatibility(jeevank, varshank),  `${dateObj.getFullYear()}`, tr);
-        updateForecastCard('card-month', masank,   engine.check_compatibility(varshank, masank),   dateObj.toLocaleString(locale, { month: 'long' }), tr);
-        updateForecastCard('card-day',   dinank,   engine.check_compatibility(masank, dinank),     `${dateObj.getDate()} (${dateObj.toLocaleString(locale, { weekday: 'short' })})`, tr);
+        const yearRel  = engine.check_compatibility(jeevank, varshank);
+        const monthRel = engine.check_compatibility(varshank, masank);
+        const dayRel   = engine.check_compatibility(masank, dinank);
+
+        lastForecastData = {
+            target,
+            locale,
+            yearRel,
+            monthRel,
+            dayRel,
+            varshank,
+            masank,
+            dinank
+        };
+
+        updateForecastCard('card-year',  varshank, yearRel,  `${dateObj.getFullYear()}`, tr, engine.get_number_relationship_insights(varshank, yearRel,  currentLang));
+        updateForecastCard('card-month', masank,   monthRel, dateObj.toLocaleString(locale, { month: 'long' }), tr, engine.get_number_relationship_insights(masank,   monthRel, currentLang));
+        updateForecastCard('card-day',   dinank,   dayRel,   `${dateObj.getDate()} (${dateObj.toLocaleString(locale, { weekday: 'short' })})`, tr, engine.get_number_relationship_insights(dinank,   dayRel,   currentLang));
         forecastResultArea.classList.remove('hidden');
     });
 
@@ -335,9 +367,9 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.addEventListener('click', e => {
                 const profile = storage.getProfile(e.target.dataset.id);
                 if (!profile) return;
-                inputDob.value  = profile.dob;
-                inputText.value = profile.text;
                 entityTypeSelect.value = profile.entityType || 'Person';
+                syncName(profile.text, null);
+                syncDob(profile.dob, null);
                 switchTab('single');
             })
         );

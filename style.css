@@ -373,6 +373,7 @@ input:focus, select:focus {
     padding: 15px;
     margin-bottom: 15px;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-between;
     align-items: center;
     box-shadow: var(--shadow-sm);
@@ -485,6 +486,36 @@ input:focus, select:focus {
     background: linear-gradient(to right, rgba(239, 68, 68, 0.05), var(--card-bg));
 }
 .status-Enemy-border .fc-status { color: var(--enemy); }
+
+/* Forecast Insight Text */
+.fc-insight {
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    line-height: 1.6;
+    text-align: left;
+    border-left: 3px solid;
+}
+
+.fc-insight-friend {
+    background: rgba(16, 185, 129, 0.08);
+    border-left-color: var(--friend);
+    color: var(--text);
+}
+
+.fc-insight-neutral {
+    background: rgba(100, 116, 139, 0.08);
+    border-left-color: var(--neutral);
+    color: var(--text);
+}
+
+.fc-insight-enemy {
+    background: rgba(239, 68, 68, 0.08);
+    border-left-color: var(--enemy);
+    color: var(--text);
+}
 
 /* --- Saved Profiles Section --- */
 .profiles-header {
